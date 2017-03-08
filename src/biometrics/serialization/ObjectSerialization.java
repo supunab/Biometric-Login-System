@@ -5,6 +5,7 @@
  */
 package biometrics.serialization;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -63,6 +64,14 @@ public class ObjectSerialization {
         }
         
         return object;
+        
+    }
+    
+    public boolean isFileAvailable(String fileName){
+        // Checks availability of a file inside the data/directory
+        File file = new File("data/"+fileName+".ser");
+        
+        return file.isFile() && !file.isDirectory();
         
     }
 }

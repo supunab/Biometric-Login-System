@@ -5,11 +5,13 @@
  */
 package biometricsecurity.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Supun
  */
-public interface AuthCredintials {
+public interface AuthCredintials extends Serializable{
     
     // To check the variance value with a given login info
     public boolean getAuthentication(AuthCredintials loginInfo);

@@ -5,18 +5,20 @@
  */
 package biometricsecurity.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Supun
  */
-public class User {
+public class User implements Serializable{
     private final String username;
     private final AuthType authType;
     private AuthCredintials credintials;
 
-    public User(String username, AuthType authType, AuthCredintials credintials) {
+    public User(String username, AuthType authType, float[] fingerHeights, float[] fingerWidths) {
         this.username = username;
         this.authType = authType;
-        this.credintials = credintials;
+        this.credintials = new HandAuthCredintials(fingerHeights, fingerWidths);
     }
 }

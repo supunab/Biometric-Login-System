@@ -5,6 +5,7 @@
  */
 package biometricsecurity.view;
 
+import biometricsecurity.controller.MainController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -14,10 +15,14 @@ import java.awt.Toolkit;
  */
 public class StartFrame extends javax.swing.JFrame {
 
+    // Controller
+    MainController controller;
+    
     /**
      * Creates new form StartFrame
      */
-    public StartFrame() {
+    public StartFrame(MainController controller) {
+        this.controller = controller;
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((int) (dim.width/2-this.getSize().getWidth()/2), (int) (dim.height/2 - this.getSize().getHeight()/2));
@@ -86,7 +91,7 @@ public class StartFrame extends javax.swing.JFrame {
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
         // Hide this windows and show the sign up frame
-        SignUpFrame signUpFrame = new SignUpFrame();
+        SignUpFrame signUpFrame = new SignUpFrame(controller);
         signUpFrame.setVisible(true);
         
         // Dispose this screen since this won't be needed
