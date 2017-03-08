@@ -73,7 +73,7 @@ public class KeyStrokeAuthCredintials implements AuthCredintials{
         double variance = 0;
         double overallAverage = getOverallAverage();
         
-        for(int i=0; i < sentence.length(); i ++){
+        for(int i=1; i < sentence.length(); i ++){
             int prev = (int) sentence.charAt(i-1);
             int current = (int) sentence.charAt(i);
             
@@ -102,14 +102,16 @@ public class KeyStrokeAuthCredintials implements AuthCredintials{
             // If dataset doesn't have a value for this state transfer take the overall average value
             if (count[prev][current] == 0){
                 // Use the overall average
-                variance += Math.pow(overallAverage - times[i], 2);
+                variance += Math.pow(overallAverage - times[i-1], 2);
             }else{
                 variance += Math.pow(averageTime[prev][current] - times[i], 2);
             }
             
         }
         
-        if (variance>0.05 * sentence.length()){
+        variance = Math.sqrt(variance);
+        System.out.println("Variance : "+variance+" max: "+(25 * sentence.length()));
+        if (variance>25 * sentence.length()){
             return false;
         }
         

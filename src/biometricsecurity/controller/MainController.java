@@ -75,4 +75,12 @@ public class MainController {
     public String getSentence(int count){
         return biometricSecurity.getSenetence(count);
     }
+    
+    public String getAuthSentene(){
+        return biometricSecurity.getAuthSentence();
+    }
+    
+    public boolean validateKeyStrokeAuth(String userName, String sentence, double[] times){
+        return biometricSecurity.validateKeyStrokeAuth(userName, sentence, times);
+    }
 }

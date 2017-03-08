@@ -94,4 +94,15 @@ public class BiometricSecurity {
         ObjectSerialization serialization = new ObjectSerialization();
         serialization.saveObject(currentUser, currentUser.getUsername());
     }
+    
+    public String getAuthSentence(){
+        // Use a random variable and return random sentences from an arary
+        return "This is an Auth sentence";
+    }
+    
+    public boolean validateKeyStrokeAuth(String userName, String sentence, double[] times){
+        ObjectSerialization serialization = new ObjectSerialization();
+        User user = (User) serialization.loadObject(userName);
+        return ((KeyStrokeAuthCredintials)user.getCredintials()).getAuthentication(sentence, times);
+    }
 }

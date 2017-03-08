@@ -98,6 +98,9 @@ public class SignInFrame extends javax.swing.JFrame {
             }
             else{
                 // Load key stroke dynamics frame
+                KeyStrokeSignIn kLogin = new KeyStrokeSignIn(controller, userName);
+                kLogin.setVisible(true);
+                this.dispose();
             }
         }else{
             JOptionPane.showMessageDialog(this, "Username you have entered is incorrect. Please check again.", "Username does not exist", JOptionPane.ERROR_MESSAGE);

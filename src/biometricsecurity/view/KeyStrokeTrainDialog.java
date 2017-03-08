@@ -11,13 +11,13 @@ import javax.swing.JOptionPane;
  */
 public class KeyStrokeTrainDialog extends javax.swing.JDialog {
 
-    MainController controller;
-    String sentence;
+    private MainController controller;
+    private String sentence;
     
     // Current position of the sentence
     private int currentPos;
     private long lastTime;
-    double[] times;
+    private double[] times;
     
     /**
      * Creates new form KeyStrokeTrainDialog
