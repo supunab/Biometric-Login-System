@@ -5,11 +5,13 @@
  */
 package biometricsecurity.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Supun
  */
-public class HandAuthCredintials implements AuthCredintials{
+public class HandAuthCredintials implements AuthCredintials, Serializable{
     
     private float[] fingerHeights;
     private float[] fingerWidths;
@@ -52,8 +54,6 @@ public class HandAuthCredintials implements AuthCredintials{
             
             loginCount ++;
         }
-        
-        // TODO - Save the object
     }
 
     public float[] getFingerHeights() {

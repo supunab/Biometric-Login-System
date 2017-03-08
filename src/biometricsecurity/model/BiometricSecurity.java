@@ -5,7 +5,9 @@
  */
 package biometricsecurity.model;
 
+import biometrics.serialization.ObjectSerialization;
 import biometricsecurity.view.StartFrame;
+import java.util.Arrays;
 
 /**
  *
@@ -19,6 +21,7 @@ public class BiometricSecurity {
     public static void main(String[] args) {
         StartFrame frame = new StartFrame();
         frame.setVisible(true);
+        
     }
     
 }
