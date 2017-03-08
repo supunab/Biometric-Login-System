@@ -5,20 +5,12 @@
  */
 package biometricsecurity;
 
-import gui.StartFrame;
-
 /**
  *
  * @author Supun
  */
-public class BiometricSecurity {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        StartFrame frame = new StartFrame();
-        frame.setVisible(true);
-    }
+public interface AuthCredintials {
+    
+    public float getVariance(AuthCredintials loginInfo);
     
 }
