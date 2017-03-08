@@ -22,7 +22,7 @@ public class BiometricSecurity {
     
     private void loadUserNames(){
         ObjectSerialization serialization = new ObjectSerialization();
-        if (serialization.isFileAvailable("username")){
+        if (serialization.isFileAvailable("usernames")){
             userNames = (ArrayList<String>) serialization.loadObject("usernames");
         }
         else{
@@ -36,6 +36,7 @@ public class BiometricSecurity {
     
     private void addNewUserName(String userName){
         // This method should only be called after uniqueness of the username is confirmed
+        userName = userName.toLowerCase();
         userNames.add(userName);
         ObjectSerialization serialization = new ObjectSerialization();
         serialization.saveObject(userNames, "usernames");
@@ -48,5 +49,18 @@ public class BiometricSecurity {
         
         // Update User Name list
         addNewUserName(userName);
+    }
+    
+    public AuthType getAuthType(String userName){
+        // This method shoud be called after checking userName existance
+        ObjectSerialization serialization = new ObjectSerialization();
+        return ((User) serialization.loadObject(userName)).getAuthType();
+    }
+    
+    public boolean validateHandAuth(String userName, float[] fingerHeights, float[] fingerWidths){
+        ObjectSerialization serialization = new ObjectSerialization();
+        User user = (User) serialization.loadObject(userName);
+        
+        return user.getCredintials().getAuthentication(new HandAuthCredintials(fingerHeights, fingerWidths));
     }
 }

@@ -5,8 +5,8 @@
  */
 package biometricsecurity.controller;
 
+import biometricsecurity.model.AuthType;
 import biometricsecurity.model.BiometricSecurity;
-import biometricsecurity.view.SignUpFrame;
 import biometricsecurity.view.StartFrame;
 import java.util.ArrayList;
 
@@ -26,11 +26,12 @@ public class MainController {
         
     }
     
-    private boolean checkUserNameExists(String userName){
+    public boolean checkUserNameExists(String userName){
         ArrayList<String> userNames = biometricSecurity.getUserNames();
         
         for(String name : userNames){
-            if(userName.equals(name)) return true;
+            // Username is case insensitive
+            if(userName.equalsIgnoreCase(name)) return true;
         }
         
         return false;
@@ -54,5 +55,11 @@ public class MainController {
         return true;
     }
     
+    public AuthType getAuthType(String userName){
+        return biometricSecurity.getAuthType(userName);
+    }
     
+    public boolean validateHandAuth(String userName, float[] fingerHeights, float[] fingerWidths){
+        return biometricSecurity.validateHandAuth(userName, fingerHeights, fingerWidths);
+    }
 }

@@ -17,8 +17,21 @@ public class User implements Serializable{
     private AuthCredintials credintials;
 
     public User(String username, AuthType authType, float[] fingerHeights, float[] fingerWidths) {
-        this.username = username;
+        this.username = username.toLowerCase();
         this.authType = authType;
         this.credintials = new HandAuthCredintials(fingerHeights, fingerWidths);
     }
+
+    public AuthType getAuthType() {
+        return authType;
+    }
+
+    public AuthCredintials getCredintials() {
+        return credintials;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    
 }
