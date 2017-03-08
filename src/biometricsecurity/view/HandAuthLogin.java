@@ -22,6 +22,8 @@ public class HandAuthLogin extends javax.swing.JFrame {
     String userName;
     /**
      * Creates new form HandAuthLogin
+     * @param controller
+     * @param userName
      */
     public HandAuthLogin(MainController controller, String userName) {
         initComponents();
@@ -69,7 +71,7 @@ public class HandAuthLogin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
 
-        jLabel3.setText("Input the following hand geometry details");
+        jLabel3.setText("Input the following hand geometry details (In millimeters)");
 
         jLabel4.setText("Thumb Height");
 
@@ -215,17 +217,23 @@ public class HandAuthLogin extends javax.swing.JFrame {
         float[] fingerHeights = new float[5];
         float[] fingerWidths = new float[5];
         
-        fingerHeights[0] = Float.parseFloat(fingerHeight1.getText());
-        fingerHeights[1] = Float.parseFloat(fingerHeight2.getText());
-        fingerHeights[2] = Float.parseFloat(fingerHeight3.getText());
-        fingerHeights[3] = Float.parseFloat(fingerHeight4.getText());
-        fingerHeights[4] = Float.parseFloat(fingerHeight5.getText());
-        
-        fingerWidths[0] = Float.parseFloat(fingerWidth1.getText());
-        fingerWidths[1] = Float.parseFloat(fingerWidth2.getText());
-        fingerWidths[2] = Float.parseFloat(fingerWidth3.getText());
-        fingerWidths[3] = Float.parseFloat(fingerWidth4.getText());
-        fingerWidths[4] = Float.parseFloat(fingerWidth5.getText());
+        try{
+            fingerHeights[0] = Float.parseFloat(fingerHeight1.getText());
+            fingerHeights[1] = Float.parseFloat(fingerHeight2.getText());
+            fingerHeights[2] = Float.parseFloat(fingerHeight3.getText());
+            fingerHeights[3] = Float.parseFloat(fingerHeight4.getText());
+            fingerHeights[4] = Float.parseFloat(fingerHeight5.getText());
+
+            fingerWidths[0] = Float.parseFloat(fingerWidth1.getText());
+            fingerWidths[1] = Float.parseFloat(fingerWidth2.getText());
+            fingerWidths[2] = Float.parseFloat(fingerWidth3.getText());
+            fingerWidths[3] = Float.parseFloat(fingerWidth4.getText());
+            fingerWidths[4] = Float.parseFloat(fingerWidth5.getText());
+        }
+        catch(NumberFormatException nfe){
+            JOptionPane.showMessageDialog(this, "Dimension should only be numbers. Cannot contain characters.", "Input Data Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
         if (controller.validateHandAuth(userName, fingerHeights, fingerWidths)){
             // Validated successfuly

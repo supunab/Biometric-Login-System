@@ -8,6 +8,7 @@ package biometricsecurity.view;
 import biometricsecurity.controller.MainController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -81,7 +82,7 @@ public class SignUpFrame extends javax.swing.JFrame {
 
         jLabel2.setText("User Name");
 
-        jLabel3.setText("Input the following hand geometry details");
+        jLabel3.setText("Input the following hand geometry details (In millimeters)");
 
         jLabel4.setText("Thumb Height");
 
@@ -281,27 +282,39 @@ public class SignUpFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
-        
         float[] fingerWidths = new float[5];
+        float[] fingerHeights = new float[5];
         
+        try{
         fingerWidths[0] = Float.parseFloat(fingerWidth1.getText());
         fingerWidths[1] = Float.parseFloat(fingerWidth2.getText());
         fingerWidths[2] = Float.parseFloat(fingerWidth3.getText());
         fingerWidths[3] = Float.parseFloat(fingerWidth4.getText());
         fingerWidths[4] = Float.parseFloat(fingerWidth5.getText());
         
-        float[] fingerHeights = new float[5];
         fingerHeights[0] = Float.parseFloat(fingerHeight1.getText());
         fingerHeights[1] = Float.parseFloat(fingerHeight2.getText());
         fingerHeights[2] = Float.parseFloat(fingerHeight3.getText());
         fingerHeights[3] = Float.parseFloat(fingerHeight4.getText());
         fingerHeights[4] = Float.parseFloat(fingerHeight5.getText());
         
-        String userName = userNameTxt.getText();
-        // TODO - Validation
+        }
+        catch(NumberFormatException nfe){
+            // Validation failed
+            JOptionPane.showMessageDialog(this, "Dimension should only be numbers. Cannot contain characters.", "Input Data Error", JOptionPane.ERROR_MESSAGE);
+            return ;
+        }
         
+        String userName = userNameTxt.getText().toLowerCase();
+        
+        Pattern p = Pattern.compile("[^a-zA-Z0-9]");
+        if (p.matcher(userName).find()){
+            JOptionPane.showMessageDialog(this, "Username can only contain letters and number. No special characters and spaces allowed.", "Invalid Username", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (!controller.createUserHandAuth(userName, fingerHeights, fingerWidths)){
             JOptionPane.showMessageDialog(this,"User Name you have entered is already taken. Please try another User Name.", "User Name Error", JOptionPane.ERROR_MESSAGE);
             userNameTxt.setText("");
@@ -318,7 +331,9 @@ public class SignUpFrame extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(this, "User registered succesfully!", "Create User Success", JOptionPane.INFORMATION_MESSAGE);
             
-            // TODO - Redirect to the sign up page
+            SignInFrame sIFrame = new SignInFrame(controller);
+            sIFrame.setVisible(true);
+            this.dispose();
         }
         
     }//GEN-LAST:event_createBtnActionPerformed
