@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package biometricsecurity;
+package biometricsecurity.model;
 
 /**
  *
  * @author Supun
  */
 public class User {
-    private String username;
-    private AuthType authType;
+    private final String username;
+    private final AuthType authType;
     private AuthCredintials credintials;
 
     public User(String username, AuthType authType, AuthCredintials credintials) {

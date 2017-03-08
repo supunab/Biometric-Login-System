@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package biometricsecurity;
+package biometricsecurity.model;
 
 /**
  *
  * @author Supun
  */
-public interface AuthCredintials {
-    
-    public float getVariance(AuthCredintials loginInfo);
-    
+public enum AuthType {
+    HAND_GEOMETRY,
+    KEY_STROKE_DYNAMICS
 }
