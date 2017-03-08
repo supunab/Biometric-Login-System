@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class BiometricSecurity {
     
     private ArrayList<String> userNames;
+    private User currentUser;
 
     public BiometricSecurity() {
         loadUserNames();
@@ -26,7 +27,7 @@ public class BiometricSecurity {
             userNames = (ArrayList<String>) serialization.loadObject("usernames");
         }
         else{
-            userNames = new ArrayList<String>();
+            userNames = new ArrayList<>();
         }
     }
 
@@ -62,5 +63,35 @@ public class BiometricSecurity {
         User user = (User) serialization.loadObject(userName);
         
         return user.getCredintials().getAuthentication(new HandAuthCredintials(fingerHeights, fingerWidths));
+    }
+    
+    public void createUserKeyStroke(String userName){
+        User user = new User(userName, AuthType.KEY_STROKE_DYNAMICS);
+        ObjectSerialization serialization = new ObjectSerialization();
+        currentUser = user;
+        serialization.saveObject(user, userName);
+        
+        // update user name list
+        addNewUserName(userName);
+    }
+    
+    public String getSenetence(){
+        String[] sentences = new String[10];
+        
+        sentences[0] = "While I am typing my profile is created";
+        sentences[1] = "It has been a long time";
+        sentences[2] = "This is another sentence";
+        
+        return sentences[0];
+        
+    }
+
+    public void updateCurrentDataSet(String sentence, double[] times){
+        ((KeyStrokeAuthCredintials)currentUser.getCredintials()).updateDataSet(sentence, times);
+    }
+    
+    public void saveKeyStrokeUser(){
+        ObjectSerialization serialization = new ObjectSerialization();
+        serialization.saveObject(currentUser, currentUser.getUsername());
     }
 }

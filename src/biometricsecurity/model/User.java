@@ -21,6 +21,14 @@ public class User implements Serializable{
         this.authType = authType;
         this.credintials = new HandAuthCredintials(fingerHeights, fingerWidths);
     }
+    
+    public User(String userName, AuthType authType){
+        this.authType = authType;
+        this.username = userName;
+        if (authType == AuthType.KEY_STROKE_DYNAMICS){
+            credintials = new KeyStrokeAuthCredintials();
+        }
+    }
 
     public AuthType getAuthType() {
         return authType;

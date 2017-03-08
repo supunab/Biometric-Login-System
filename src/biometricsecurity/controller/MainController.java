@@ -46,20 +46,28 @@ public class MainController {
         return true;
     }
     
-    public boolean createUserKeyStroke (String name){
-        if (checkUserNameExists(name)){
-            return false;
-        }
-        
-        // Implement the logic here
-        return true;
-    }
-    
     public AuthType getAuthType(String userName){
         return biometricSecurity.getAuthType(userName);
     }
     
     public boolean validateHandAuth(String userName, float[] fingerHeights, float[] fingerWidths){
         return biometricSecurity.validateHandAuth(userName, fingerHeights, fingerWidths);
+    }
+    
+    public boolean createUserKeyStroke (String name){
+        if (checkUserNameExists(name)){
+            return false;
+        }
+        
+        biometricSecurity.createUserKeyStroke(name);
+        return true;
+    }
+    
+    public void updateCurrentDataSet(String sentence, double[] times){
+        biometricSecurity.updateCurrentDataSet(sentence, times);
+    }
+    
+    public void saveKeyStrokeUser(){
+        biometricSecurity.saveKeyStrokeUser();
     }
 }
