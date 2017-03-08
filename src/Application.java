@@ -1,6 +1,5 @@
 
 import biometricsecurity.controller.MainController;
-import biometricsecurity.view.StartFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 

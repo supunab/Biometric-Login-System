@@ -8,6 +8,7 @@ package biometricsecurity.view;
 import biometricsecurity.controller.MainController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,7 +16,8 @@ import java.awt.Toolkit;
  */
 public class KeyStrokeTrain extends javax.swing.JFrame {
 
-    MainController controller;
+    private MainController controller;
+    private int count;
     
     /**
      * Creates new form KeyStrokeTrain
@@ -23,6 +25,8 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
      */
     public KeyStrokeTrain(MainController controller, String userName) {
         initComponents();
+        errorLbl.setVisible(false);
+        count = 0;
         this.controller = controller;
         // Center the view
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -43,6 +47,7 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
         userNameLbl = new javax.swing.JLabel();
         trainBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
+        errorLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Train Key Stroke Dynamics");
@@ -57,6 +62,14 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
         });
 
         submitBtn.setText("Submit");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitBtnActionPerformed(evt);
+            }
+        });
+
+        errorLbl.setForeground(new java.awt.Color(255, 0, 0));
+        errorLbl.setText("Training of the model is completed. Please click on the submit button to complete.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,34 +81,60 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
                         .addGap(21, 21, 21)
                         .addComponent(userNameLbl))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(trainBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(87, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(errorLbl))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(trainBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)))
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(userNameLbl)
-                .addGap(47, 47, 47)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(trainBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(submitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(42, 42, 42))
+                    .addComponent(submitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                    .addComponent(trainBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorLbl)
+                .addGap(17, 17, 17))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void trainBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainBtnActionPerformed
-        KeyStrokeTrainDialog kDialog = new KeyStrokeTrainDialog(this, true, controller);
+        if (count == 10){
+            JOptionPane.showMessageDialog(this, "Training the model is completed. Now press submit to complete.", "Training Complete", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        KeyStrokeTrainDialog kDialog = new KeyStrokeTrainDialog(this, true, controller, controller.getSentence(count));
         kDialog.setVisible(true);
+        
+        count ++;
+        if(count==10){
+            errorLbl.setVisible(true);
+        }
+        
     }//GEN-LAST:event_trainBtnActionPerformed
+
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        controller.saveKeyStrokeUser();
+        JOptionPane.showMessageDialog(this, "Create new account completed. You may now sign in.", "Account Created Successfully", JOptionPane.INFORMATION_MESSAGE);
+        
+        SignInFrame sIFrame = new SignInFrame(controller);
+        sIFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_submitBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel errorLbl;
     private javax.swing.JButton submitBtn;
     private javax.swing.JButton trainBtn;
     private javax.swing.JLabel userNameLbl;

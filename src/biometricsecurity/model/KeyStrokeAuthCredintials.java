@@ -49,7 +49,7 @@ public class KeyStrokeAuthCredintials implements AuthCredintials{
                 current -= 65;
             }
             
-            averageTime[prev][current] = (averageTime[prev][current] * count[prev][current] + times[i]) / (count[prev][current] + 1);
+            averageTime[prev][current] = (averageTime[prev][current] * count[prev][current] + times[i-1]) / (count[prev][current] + 1);
             count[prev][current] ++;
         }
     }

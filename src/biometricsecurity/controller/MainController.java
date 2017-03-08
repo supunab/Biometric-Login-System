@@ -7,6 +7,7 @@ package biometricsecurity.controller;
 
 import biometricsecurity.model.AuthType;
 import biometricsecurity.model.BiometricSecurity;
+import biometricsecurity.view.KeyStrokeTrainDialog;
 import biometricsecurity.view.StartFrame;
 import java.util.ArrayList;
 
@@ -69,5 +70,9 @@ public class MainController {
     
     public void saveKeyStrokeUser(){
         biometricSecurity.saveKeyStrokeUser();
+    }
+    
+    public String getSentence(int count){
+        return biometricSecurity.getSenetence(count);
     }
 }

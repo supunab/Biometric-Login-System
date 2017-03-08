@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biometricsecurity.view;
 
 import biometricsecurity.controller.MainController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +12,12 @@ import java.awt.Toolkit;
 public class KeyStrokeTrainDialog extends javax.swing.JDialog {
 
     MainController controller;
+    String sentence;
+    
+    // Current position of the sentence
+    private int currentPos;
+    private long lastTime;
+    double[] times;
     
     /**
      * Creates new form KeyStrokeTrainDialog
@@ -23,12 +25,16 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
      * @param modal
      * @param controller
      */
-    public KeyStrokeTrainDialog(java.awt.Frame parent, boolean modal, MainController controller) {
+    public KeyStrokeTrainDialog(java.awt.Frame parent, boolean modal, MainController controller, String sentence) {
         super(parent, modal);
         initComponents();
-        
+        errorLbl.setVisible(false);
+        this.sentence = sentence;
+        currentPos = 0;
+        txtLbl.setText("");
         this.controller = controller;
-        
+        times = new double[sentence.length()-1];
+        sentenceLbl.setText(sentence);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((int) (dim.width/2-this.getSize().getWidth()/2), (int) (dim.height/2 - this.getSize().getHeight()/2));
     }
@@ -45,10 +51,12 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         sentenceLbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        txtInput = new javax.swing.JTextArea();
+        btnSubmit = new javax.swing.JButton();
+        btnRetry = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+        errorLbl = new javax.swing.JLabel();
+        txtLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Train Model");
@@ -57,15 +65,41 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
 
         sentenceLbl.setText("<<Sentence>>");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtInput.setColumns(20);
+        txtInput.setRows(5);
+        txtInput.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtInputKeyTyped(evt);
+            }
+        });
+        jScrollPane1.setViewportView(txtInput);
 
-        jButton1.setText("Submit");
+        btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Retry");
+        btnRetry.setText("Retry");
+        btnRetry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetryActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Exit");
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+
+        errorLbl.setForeground(new java.awt.Color(255, 0, 0));
+        errorLbl.setText("Please click submit button to submit the results. Or press retry.");
+
+        txtLbl.setForeground(new java.awt.Color(255, 0, 0));
+        txtLbl.setText("Text");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,15 +115,23 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRetry, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                                .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)))))
+                .addContainerGap(20, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(sentenceLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(errorLbl)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -97,28 +139,75 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
-                .addComponent(sentenceLbl)
                 .addGap(18, 18, 18)
+                .addComponent(sentenceLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtLbl)
+                .addGap(8, 8, 8)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorLbl)
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRetry, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInputKeyTyped
+        if (currentPos == sentence.length()){
+            txtInput.setText("");
+            return;
+        }
+        
+        if (evt.getKeyChar() == sentence.charAt(currentPos)){
+            if (currentPos == 0){
+                lastTime = System.currentTimeMillis();
+                currentPos ++;
+            }else{
+                times[currentPos-1] = System.currentTimeMillis() - lastTime;
+                lastTime = System.currentTimeMillis();
+                currentPos++;
+            }
+            txtLbl.setText(sentence.substring(0, currentPos));
+        }
+        
+        if (currentPos == sentence.length()){
+            JOptionPane.showMessageDialog(this, "Data successfully recorded.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            errorLbl.setVisible(true);
+            return;
+        }
+    }//GEN-LAST:event_txtInputKeyTyped
+
+    private void btnRetryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetryActionPerformed
+        currentPos = 0;
+        txtInput.setText("");
+        txtLbl.setText("");
+        errorLbl.setVisible(false);
+    }//GEN-LAST:event_btnRetryActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        controller.updateCurrentDataSet(sentence, times);
+        this.dispose();
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnRetry;
+    private javax.swing.JButton btnSubmit;
+    private javax.swing.JLabel errorLbl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel sentenceLbl;
+    private javax.swing.JTextArea txtInput;
+    private javax.swing.JLabel txtLbl;
     // End of variables declaration//GEN-END:variables
 }

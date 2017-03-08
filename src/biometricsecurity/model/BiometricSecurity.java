@@ -75,14 +75,14 @@ public class BiometricSecurity {
         addNewUserName(userName);
     }
     
-    public String getSenetence(){
+    public String getSenetence(int count){
         String[] sentences = new String[10];
         
         sentences[0] = "While I am typing my profile is created";
         sentences[1] = "It has been a long time";
         sentences[2] = "This is another sentence";
         
-        return sentences[0];
+        return sentences[count];
         
     }
 
