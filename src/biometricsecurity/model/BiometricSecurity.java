@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biometricsecurity.model;
 
 import biometrics.serialization.ObjectSerialization;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -80,7 +76,15 @@ public class BiometricSecurity {
         
         sentences[0] = "While I am typing my profile is created";
         sentences[1] = "It has been a long time";
-        sentences[2] = "This is another sentence";
+        sentences[2] = "One day all your hardwork will pay off";
+        sentences[3] = "Follow your dreams or live a simple life";
+        sentences[4] = "You have got to find what you love";
+        sentences[5] = "None of this had even a hope of any practical application in my life";
+        sentences[6] = "My second story is about love and loss";
+        sentences[7] = "If you live each day as if it was your last someday you will be right";
+        sentences[8] = "Your time is limited so do not waste it";
+        sentences[9] = "Finaly stay hungry and stay foolish";
+        
         
         return sentences[count];
         
@@ -97,7 +101,15 @@ public class BiometricSecurity {
     
     public String getAuthSentence(){
         // Use a random variable and return random sentences from an arary
-        return "This is an Auth sentence";
+        String[] sentence = new String[5];
+        
+        sentence[0] = "You do not have to agree with all";
+        sentence[1] = "One day you will realize you are correct";
+        sentence[2] = "Try harder you will never be dissapointed";
+        sentence[3] = "If there is a will there is a way";
+        sentence[4] = "Do whatever you feel right";
+        
+        return sentence[Math.abs(new Random().nextInt()) % 5];
     }
     
     public boolean validateKeyStrokeAuth(String userName, String sentence, double[] times){

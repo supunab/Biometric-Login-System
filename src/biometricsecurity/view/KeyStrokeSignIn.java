@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biometricsecurity.view;
 
 import biometricsecurity.controller.MainController;
@@ -23,6 +18,7 @@ public class KeyStrokeSignIn extends javax.swing.JFrame {
     private int currentPos;
     private long lastTime;
     private double[] times;
+    private boolean complete;
     
     String userName;
     
@@ -34,6 +30,7 @@ public class KeyStrokeSignIn extends javax.swing.JFrame {
         sentence = controller.getAuthSentene();
         times = new double[sentence.length()];
         this.controller = controller;
+        complete = false;
         
         errorLbl.setVisible(false);
         txtLbl.setText("");
@@ -153,7 +150,7 @@ public class KeyStrokeSignIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        if (currentPos < sentence.length()){
+        if (currentPos < sentence.length() || !complete){
             JOptionPane.showMessageDialog(this, "Please complete the whole sentence", "Incomplete Sentence", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -170,6 +167,7 @@ public class KeyStrokeSignIn extends javax.swing.JFrame {
 
     private void btnRetryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetryActionPerformed
         currentPos = 0;
+        complete = false;
         txtInput.setText("");
         txtLbl.setText("");
         errorLbl.setVisible(false);
@@ -194,7 +192,8 @@ public class KeyStrokeSignIn extends javax.swing.JFrame {
         }
 
         if (currentPos == sentence.length()){
-            JOptionPane.showMessageDialog(this, "Data successfully recorded.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Sentence completed. Now click on the login button to validate.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            complete = true;
             errorLbl.setVisible(true);
             return;
         }

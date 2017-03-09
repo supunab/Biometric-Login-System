@@ -110,8 +110,9 @@ public class KeyStrokeAuthCredintials implements AuthCredintials{
         }
         
         variance = Math.sqrt(variance);
+        
         System.out.println("Variance : "+variance+" max: "+(25 * sentence.length()));
-        if (variance>25 * sentence.length()){
+        if (variance> Math.max(35 * sentence.length(), 700)){
             return false;
         }
         

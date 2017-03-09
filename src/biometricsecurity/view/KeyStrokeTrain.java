@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biometricsecurity.view;
 
 import biometricsecurity.controller.MainController;
@@ -18,6 +13,7 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
 
     private MainController controller;
     private int count;
+    private boolean complete;
     
     /**
      * Creates new form KeyStrokeTrain
@@ -48,6 +44,7 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
         trainBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
         errorLbl = new javax.swing.JLabel();
+        errorLbl1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Train Key Stroke Dynamics");
@@ -71,6 +68,9 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
         errorLbl.setForeground(new java.awt.Color(255, 0, 0));
         errorLbl.setText("Training of the model is completed. Please click on the submit button to complete.");
 
+        errorLbl1.setForeground(new java.awt.Color(255, 0, 0));
+        errorLbl1.setText("Please train the model many times to have an accurate login");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,13 +90,19 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
                         .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)))
                 .addGap(18, 18, 18))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(errorLbl1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(userNameLbl)
-                .addGap(43, 43, 43)
+                .addGap(23, 23, 23)
+                .addComponent(errorLbl1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(submitBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
                     .addComponent(trainBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -121,9 +127,16 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
             errorLbl.setVisible(true);
         }
         
+        complete = true;
     }//GEN-LAST:event_trainBtnActionPerformed
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        if (!complete){
+            JOptionPane.showConfirmDialog(this, "You have to train the model at least one time.", "Not enough data", JOptionPane.ERROR_MESSAGE);
+            return ;
+            
+        }
+        
         controller.saveKeyStrokeUser();
         JOptionPane.showMessageDialog(this, "Create new account completed. You may now sign in.", "Account Created Successfully", JOptionPane.INFORMATION_MESSAGE);
         
@@ -135,6 +148,7 @@ public class KeyStrokeTrain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel errorLbl;
+    private javax.swing.JLabel errorLbl1;
     private javax.swing.JButton submitBtn;
     private javax.swing.JButton trainBtn;
     private javax.swing.JLabel userNameLbl;

@@ -18,6 +18,7 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
     private int currentPos;
     private long lastTime;
     private double[] times;
+    private boolean completed;
     
     /**
      * Creates new form KeyStrokeTrainDialog
@@ -31,6 +32,7 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
         errorLbl.setVisible(false);
         this.sentence = sentence;
         currentPos = 0;
+        completed = false;
         txtLbl.setText("");
         this.controller = controller;
         times = new double[sentence.length()-1];
@@ -178,6 +180,7 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
         
         if (currentPos == sentence.length()){
             JOptionPane.showMessageDialog(this, "Data successfully recorded.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            completed = true;
             errorLbl.setVisible(true);
             return;
         }
@@ -188,6 +191,7 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
         txtInput.setText("");
         txtLbl.setText("");
         errorLbl.setVisible(false);
+        completed = false;
     }//GEN-LAST:event_btnRetryActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -195,6 +199,10 @@ public class KeyStrokeTrainDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        if (!completed){
+            JOptionPane.showMessageDialog(this, "You have to complete typing the sentence. A pop up dialog will appear after completion.");
+            return ;
+        }
         controller.updateCurrentDataSet(sentence, times);
         this.dispose();
     }//GEN-LAST:event_btnSubmitActionPerformed
